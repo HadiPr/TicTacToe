@@ -1,97 +1,50 @@
-const board = document.querySelector(".board");
-const tiles = document.querySelectorAll(".tile");
-const clickfunc = (e) => {
-  if (!e.srcElement.className.includes("filled")) {
-    let counter = document.querySelectorAll(".filled").length;
-    e.srcElement.classList.add("filled");
-    if (counter % 2) e.srcElement.classList.add("fill-x");
-    else e.srcElement.classList.add("fill-o");
-    if (checkGame() == "tile filled fill-o") {
-      board.className += " o-wins game-over";
-    } else if (checkGame() == "tile filled fill-x") {
-      winLine.forEach((tile) => tile.classList.add("winLine"));
-      board.className += " x-wins game-over";
-    } else if (counter == 8) board.className += " game-over draw";
-  }
-};
-var winLine;
-function checkGame() {
-  for (let i = 0; i < 3; i++) {
-    if (
-      tiles[i].className == tiles[i + 3].className &&
-      tiles[i + 3].className == tiles[i + 6].className
-    ) {
-      winLine = [tiles[i], tiles[i + 3], tiles[i + 6]];
-      if (
-        tiles[i].className == "tile filled fill-x" ||
-        tiles[i].className == "tile filled fill-o"
-      ) {
-        winLine.forEach((item) => {
-          item.querySelector("span").classList.add("vertical-line");
-        });
+const winStates = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6]
+]
+const tiles = document.querySelectorAll('.tile')
+const board = document.querySelector('.board')
+var temp;
+var counter = 0;
+function go_on(event) {
+  if (!this.classList.contains('filled')) {
+      this.classList.add("filled")
+      this.classList.add(counter++ % 2 ? "fill-o" : "fill-x")
+      //check winner
+      if (checkWinner().winner) {
+          board.className +=
+              checkWinner().winner == "tile filled fill-x" ?
+                  " game-over x-wins" : " game-over o-wins"
+          checkWinner().winline.forEach(item =>
+              document.querySelector(`div[line="${winStates.indexOf(item)}"]`)
+                  .style.display = "block"
+          )
       }
-      return tiles[i].className;
-    }
-  }
-  for (let i = 0; i < 7; i += 3) {
-    if (
-      tiles[i].className == tiles[i + 1].className &&
-      tiles[i + 1].className == tiles[i + 2].className
-    ) {
-      winLine = [tiles[i], tiles[i + 1], tiles[i + 2]];
-      if (
-        tiles[i].className == "tile filled fill-x" ||
-        tiles[i].className == "tile filled fill-o"
-      ) {
-        winLine.forEach((item) => {
-          item.querySelector("span").classList.add("horizontal-line");
-        });
-      }
-      return tiles[i].className;
-    }
-  }
-  if (
-    tiles[0].className == tiles[4].className &&
-    tiles[4].className == tiles[8].className
-  ) {
-    winLine = [tiles[0], tiles[4], tiles[8]];
-    if (
-      tiles[4].className == "tile filled fill-x" ||
-      tiles[4].className == "tile filled fill-o"
-    ) {
-      winLine.forEach((item) => {
-        item.querySelector("span").classList.add("back-slash-like-line");
-      });
-    }
-
-    return tiles[4].className;
-  }
-  if (
-    tiles[2].className == tiles[4].className &&
-    tiles[4].className == tiles[6].className
-  ) {
-    winLine = [tiles[2], tiles[4], tiles[6]];
-    if (
-      tiles[4].className == "tile filled fill-x" ||
-      tiles[4].className == "tile filled fill-o"
-    ) {
-      winLine.forEach((item) => {
-        item.querySelector("span").classList.add("slash-like-line");
-      });
-    }
-
-    return tiles[4].className;
+      if (counter == 9) board.className += " game-over draw"
   }
 }
-tiles.forEach((tile) => (tile.onclick = clickfunc));
-const reset = (e) => {
-  if (
-    e.srcElement == document.body &&
-    document.querySelector(".board").className != "board"
-  ) {
-    tiles.forEach((tile) => (tile.className = "tile"));
-    board.className = "board";
-    document.querySelectorAll("span").forEach((item) => (item.className = ""));
+function checkWinner() {
+  let winnerObj = { winline: [] }
+  winStates.forEach(state => {
+      if (
+          tiles[state[0]].className == tiles[state[1]].className &&
+          tiles[state[2]].className == tiles[state[1]].className &&
+          tiles[state[0]].className != "tile"
+      ) {
+          winnerObj.winline.push(state)
+          winnerObj.winner = tiles[state[0]].className
+      }
+  })
+  return winnerObj
+}
+tiles.forEach(tile => tile.onclick = go_on)
+//reset function
+document.body.onclick = function () {
+  if (event.target == document.body && board.className!= "board") {
+      board.className = "board"
+      counter = 0
+      tiles.forEach(tile => tile.className = "tile")
+      document.querySelectorAll('.winline').forEach(line=> line.style.display= "none")
   }
-};
-document.body.onclick = reset;
+}
