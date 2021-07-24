@@ -1,0 +1,167 @@
+body,
+html {
+  width: 100%;
+  height: 100%;
+}
+.reset {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.board {
+  width: 90vmin;
+  height: 90vmin;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  box-shadow: 0 0 50px 10px gray;
+  border: 1px solid maroon;
+  box-sizing: border-box;
+}
+.tile {
+  width: calc(100% / 3);
+  height: calc(100% / 3);
+  float: left;
+  border: 1px solid #ff00ff;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.tile:not(.filled):hover {
+  background-color: #ccc;
+}
+.tile.filled {
+  cursor: default;
+}
+.fill-x::after,
+.fill-x::before {
+  content: "";
+  display: inline-block;
+  width: 11%;
+  height: 50%;
+  border-radius: 50%;
+  background-color: red;
+  transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
+  transform-origin: center center;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+}
+.fill-x::before {
+  transform: translate(-50%, -50%) rotate(-45deg) scale(1.2);
+}
+.fill-o::after,
+.fill-o::before {
+  content: "";
+  display: block;
+  width: 55%;
+  height: 55%;
+  background-color: #0044ff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.fill-o::after {
+  width: 35%;
+  height: 35%;
+  background-color: white;
+}
+.fill-o {
+  box-shadow: inset 0 0 25px 10px rgba(0, 0, 255, 0.4);
+}
+.fill-x {
+  box-shadow: inset 0 0 25px 10px rgba(255, 0, 0, 0.4);
+}
+.draw::after,
+.o-wins::after,
+.x-wins::after {
+  content: "It's Draw";
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  font-size: 13vmin;
+  color: orange;
+  text-align: center;
+  line-height: 9;
+  z-index: 4;
+}
+.o-wins::after {
+  content: 'o wins';
+}
+.x-wins::after {
+  content: 'x wins';
+}
+.game-over::before {
+  content: 'Game Over';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 4.5;
+  text-align: center;
+  font-size: 15vmin;
+  background-color: rgba(0, 0, 0, 0.623);
+  color: white;
+  z-index: 3;
+}
+.winLine {
+  background-color: green;
+}
+div.winline {
+  width: 4vmin;
+  height: 70vmin;
+  background-color: rgba(0, 0, 0, 0.479);
+  position: absolute;
+  z-index: 2;
+  border-radius: calc(5vmin);
+  display: none;
+}
+.winline[line="0"] {
+  top: calc(100% / 6);
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.winline[line="1"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.winline[line="2"] {
+  top: calc(100% / 6 * 5);
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.winline[line="3"] {
+  top: 50%;
+  left: calc(100% / 6);
+  transform: translate(-50%, -50%);
+}
+.winline[line="4"] {
+  top: 50%;
+  left: calc(100% / 2);
+  transform: translate(-50%, -50%);
+}
+.winline[line="5"] {
+  top: 50%;
+  right: calc(100% / 6);
+  transform: translate(50%, -50%);
+}
+.winline[line="7"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  height: 80vmin;
+}
+.winline[line="6"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  height: 80vmin;
+}
